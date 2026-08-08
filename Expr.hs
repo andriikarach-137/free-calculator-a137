@@ -7,6 +7,8 @@ data UnOp = Neg | Exp | Log | Sin | Cos | Tan
 data Expr 
     = BinOp BinOp Expr Expr 
     | UnOp UnOp Expr 
+    | Num Int 
+    | IDENTIFIER String 
 
 data Assgn = Let String Expr 
 
