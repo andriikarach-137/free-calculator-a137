@@ -1,8 +1,8 @@
 module Expr where 
 
-data BinOp = Add | Sub | Mul | Div | Pow
+data BinOp = Add | Sub | Mul | Div | Expr 
 
-data UnOp = Neg | Inv | Exp | Log | Fact 
+data UnOp = Neg | Fact 
 
 data Expr 
     = BinOp Expr Expr 
