@@ -2,14 +2,14 @@ module Expr where
 
 data BinOp = Add | Sub | Mul | Div | Pow
 
-data UnOp = Neg | Exp | Log | Sin | Cos | Tan 
+data UnOp = Neg | Exp | Log | Sin | Cos | Tan | Fact 
 
 data Expr 
     = BinOp BinOp Expr Expr 
     | UnOp UnOp Expr 
-    | Num Int 
-    | IDENTIFIER String 
+    | Num Double  
+    | Identifier String 
 
 data Assgn = Let String Expr 
 
-data Stmt = Expr Expr | Assgn Assgn 
+data Stmt = Expr Expr | Assgn Assgn | Exit 

@@ -5,16 +5,15 @@ Backus-Naur-Form for the calculator
 
 RULES OF THE LANGUAGE:
 
-<program>  ::= (<stmt>)*
+<program>  ::= (<stmt>)* EXIT
 <stmt>     ::= <assgn> | <expr> 
 <assgn>    ::= <let> IDENTIFIER ASSGN_OP <expr>
 <expr>     ::= <term> ((PLUS|MINUS) <term>)*
 <term>     ::= <factor> ((STAR|DASH) <factor>)*
 <factor>   ::= <unary> | <unary> <POW> <factor> 
 <unary>    ::= <postfix> | MINUS <unary> | LOG <unary> | SIN <unary> | COS <unary> | TAN <unary> 
-<postfix>  ::= <primary> postfix' 
-<postfix'> ::= FACT postfix' | EPS
-<primary>  ::= LBR <expr> RBR | NUM | IDENTIFIER | EXIT
+<postfix>  ::= <primary> (FACT)*
+<primary>  ::= LBR <expr> RBR | NUM | IDENTIFIER 
 
 TERMINAL TOKENS:
 
