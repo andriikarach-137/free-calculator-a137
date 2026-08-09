@@ -59,6 +59,10 @@ item :: Parser Char
 item = satisfy $ const True
 
 
+alpha :: Parser Char 
+alpha = satisfy isAlpha 
+
+
 char :: Char -> Parser Char
 char = satisfy . (==) 
 
