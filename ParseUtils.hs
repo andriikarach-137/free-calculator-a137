@@ -63,6 +63,11 @@ char :: Char -> Parser Char
 char = satisfy . (==) 
 
 
+string :: String -> Parser String 
+string [] = Parser $ \s -> Just ("", s)
+string (c:cs) = (:) <$> char c <*> string cs 
+
+
 -- Numeric parsers 
 
 
