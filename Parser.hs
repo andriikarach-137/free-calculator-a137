@@ -77,4 +77,4 @@ parseStmt = Assgn <$> parseAssgn <|> Expr <$> parseExpr
 
 
 parseProgram :: Parser Program 
-parseProgram = many parseStmt <* string ":q" 
+parseProgram = many (parseStmt <* string "\n") <* string ":q" 

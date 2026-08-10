@@ -5,7 +5,7 @@ Backus-Naur-Form for the calculator
 
 RULES OF THE LANGUAGE:
 
-<program>  ::= (<stmt>)* EXIT
+<program>  ::= (<stmt> NEWLINE)* EXIT
 <stmt>     ::= <assgn> | <expr> 
 <assgn>    ::= LET IDENTIFIER ASSGN_OP <expr>
 <expr>     ::= <term> ((PLUS|MINUS) <term>)*
@@ -18,6 +18,7 @@ RULES OF THE LANGUAGE:
 TERMINAL TOKENS:
 
 IDENTIFIER ::= CHAR (CHAR | DIGIT)*
+NEWLINE    ::= "\n"
 LET        ::= "let"
 ASSGN_OP   ::= "<<"
 PLUS       ::= "+"
