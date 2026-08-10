@@ -18,7 +18,7 @@ parseIDENTIFIER = ((:) <$> alpha <*> many (alpha <|> digit))
 -- Parsers for non-terminal rules 
 
 parsePrimary :: Parser Expr 
-parsePrimary = char '(' *> parseExpr <* char ')' <|> Num <$> parseNUM <|> Identifier <$> parseIDENTIFIER
+parsePrimary = char '(' *> parseExpr <* char ')' <|> Val <$> parseNUM <|> Var <$> parseIDENTIFIER
 
 
 parsePostfix :: Parser Expr 
@@ -68,12 +68,12 @@ parseExpr = combine <$> parseTerm <*> many parseExpr'
                  (Sub, ) <$> (char '-' *> parseTerm)
 
 
-parseAssgn :: Parser Assgn 
-parseAssgn = Let <$> (string "let " *> parseIDENTIFIER) <*> (string " = " *> parseExpr)
+parseAssgn :: Parser Expr 
+parseAssgn = Assign <$> (string "let " *> parseIDENTIFIER) <*> (string " = " *> parseExpr)
 
 
-parseStmt :: Parser Stmt 
-parseStmt = Assgn <$> parseAssgn <|> Expr <$> parseExpr
+parseStmt :: Parser Expr 
+parseStmt = parseAssgn <|> parseExpr 
 
 
 parseProgram :: Parser Program 
