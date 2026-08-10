@@ -7,7 +7,7 @@ RULES OF THE LANGUAGE:
 
 <program>  ::= (<stmt>)* EXIT
 <stmt>     ::= <assgn> | <expr> 
-<assgn>    ::= <let> IDENTIFIER ASSGN_OP <expr>
+<assgn>    ::= LET IDENTIFIER ASSGN_OP <expr>
 <expr>     ::= <term> ((PLUS|MINUS) <term>)*
 <term>     ::= <factor> ((STAR|DASH) <factor>)*
 <factor>   ::= <unary> (POW <factor>)* 
@@ -18,6 +18,7 @@ RULES OF THE LANGUAGE:
 TERMINAL TOKENS:
 
 IDENTIFIER ::= CHAR (CHAR | DIGIT)*
+LET        ::= "let"
 ASSGN_OP   ::= "<<"
 PLUS       ::= "+"
 MINUS      ::= "-"

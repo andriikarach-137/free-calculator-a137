@@ -8,17 +8,17 @@ import Control.Applicative
 
 -- Terminal rules parsers 
 
-parseNUM :: Parser Expr 
-parseNUM = Num <$> double 
+parseNUM :: Parser Double 
+parseNUM = double 
 
 
-parseIDENTIFIER :: Parser Expr 
-parseIDENTIFIER = Identifier <$> ((:) <$> alpha <*> many (alpha <|> digit))
+parseIDENTIFIER :: Parser String 
+parseIDENTIFIER = ((:) <$> alpha <*> many (alpha <|> digit))
 
 -- Parsers for non-terminal rules 
 
 parsePrimary :: Parser Expr 
-parsePrimary = char '(' *> parseExpr <* char ')' <|> parseNUM <|> parseIDENTIFIER
+parsePrimary = char '(' *> parseExpr <* char ')' <|> Num <$> parseNUM <|> Identifier <$> parseIDENTIFIER
 
 
 parsePostfix :: Parser Expr 
@@ -66,3 +66,15 @@ parseExpr = combine <$> parseTerm <*> many parseExpr'
     parseExpr' :: Parser (BinOp, Expr)
     parseExpr' = (Add, ) <$> (char '+' *> parseTerm) <|>
                  (Sub, ) <$> (char '-' *> parseTerm)
+
+
+parseAssgn :: Parser Assgn 
+parseAssgn = Let <$> (string "let " *> parseIDENTIFIER) <*> (string " = " *> parseExpr)
+
+
+parseStmt :: Parser Stmt 
+parseStmt = Assgn <$> parseAssgn <|> Expr <$> parseExpr
+
+
+parseProgram :: Parser Program 
+parseProgram = many parseStmt <* string ":q" 
