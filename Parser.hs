@@ -48,6 +48,21 @@ parseFactor = combine <$> parseUnary <*> parseFactor'
     parseFactor' = many $ char '^' *> parseFactor  
 
 
+combine :: Expr -> [(BinOp, Expr)] -> Expr 
+combine = foldl (\e (op, e') -> BinOp op e e') 
+
+
+parseTerm :: Parser Expr 
+parseTerm = combine <$> parseFactor <*> many parseTerm' 
+  where
+    parseTerm' :: Parser (BinOp, Expr) 
+    parseTerm' = (Mul, ) <$> (char '*' *> parseFactor) <|> 
+                 (Div, ) <$> (char '/' *> parseFactor)
+
 
 parseExpr :: Parser Expr 
-parseExpr = undefined 
+parseExpr = combine <$> parseTerm <*> many parseExpr' 
+  where
+    parseExpr' :: Parser (BinOp, Expr)
+    parseExpr' = (Add, ) <$> (char '+' *> parseTerm) <|>
+                 (Sub, ) <$> (char '-' *> parseTerm)
