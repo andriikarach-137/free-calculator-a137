@@ -10,7 +10,7 @@ RULES OF THE LANGUAGE:
 <assgn>    ::= <let> IDENTIFIER ASSGN_OP <expr>
 <expr>     ::= <term> ((PLUS|MINUS) <term>)*
 <term>     ::= <factor> ((STAR|DASH) <factor>)*
-<factor>   ::= <unary> | <unary> <POW> <factor> 
+<factor>   ::= <unary> (POW <factor>)* 
 <unary>    ::= <postfix> | MINUS <unary> | LOG <unary> | SIN <unary> | COS <unary> | TAN <unary> 
 <postfix>  ::= <primary> (FACT)*
 <primary>  ::= LBR <expr> RBR | NUM | IDENTIFIER 

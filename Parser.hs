@@ -38,12 +38,15 @@ parseUnary = parsePostfix
 
 
 parseFactor :: Parser Expr 
-parseFactor = do 
-    u <- parseUnary 
-    m <- optional (char '^' *> parseFactor )
-    case m of 
-        Nothing -> return u
-        Just f  -> return $ BinOp Pow u f 
+parseFactor = combine <$> parseUnary <*> parseFactor' 
+  where
+    combine :: Expr -> [Expr] -> Expr 
+    combine e [] = e 
+    combine e es = BinOp Pow e $ foldr1 (BinOp Pow) es 
+
+    parseFactor' :: Parser [Expr]
+    parseFactor' = many $ char '^' *> parseFactor  
+
 
 
 parseExpr :: Parser Expr 
