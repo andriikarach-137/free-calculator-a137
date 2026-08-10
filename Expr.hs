@@ -9,8 +9,11 @@ data Expr
     | UnOp UnOp Expr 
     | Val Double  
     | Var String 
-    | Assign String Expr 
     deriving (Show, Eq)
 
 
-type Program = [Expr]
+data Assign = Let String Expr 
+
+data Stmt = Expr Expr | Assign Assign 
+
+type Program = [Stmt]

@@ -1,6 +1,8 @@
 module Eval where 
 
 import Expr 
+import ParseUtils
+import Parser 
 
 import Data.Map (Map)
 import Data.Map qualified as Map 
@@ -43,20 +45,19 @@ unOp Fact = safeFact
                | otherwise = Just $ product [1..x]
 
 
-eval :: Env -> Expr -> Maybe (Double, Env)
+eval :: Env -> Expr -> Maybe Double 
 eval env (BinOp op e e') = do
-    (x, env') <- eval env e 
-    (y, env'') <- eval env' e' 
-    v <- binOps op x y 
-    pure (v, env'')  
+    x <- eval env e 
+    y <- eval env e' 
+    binOps op x y 
 eval env (UnOp op e) = do 
-    (x, env') <- eval env e 
-    v <- unOps op x 
-    pure (v, env') 
-eval env (Val x) = Just (x, env)
-eval env (Var x) = do 
-    v <- Map.lookup x env 
-    pure (v, env) 
-eval env (Assign x e) = do
-    (v, env') <- eval env e 
-    pure (v, Map.insert x v env') 
+    x <- eval env e 
+    unOps op x 
+eval _ (Val x) = Just x  
+eval env (Var x) = Map.lookup x env 
+
+
+assign :: Env -> Assign -> Maybe Env 
+assign env (Let s e) = do 
+    v <- eval env e 
+    pure $ Map.insert s v env 

@@ -92,3 +92,22 @@ double' = (++) <$> digits <*> (parseFrac) <|> digits
   where 
     parseFrac :: Parser String 
     parseFrac = (:) <$> char '.' <*> digits 
+
+
+-- Token parsers
+
+
+spaces :: Parser ()
+spaces = () <$ many (satisfy (\c -> c == ' ' || c == '\t')) 
+
+
+token :: Parser a -> Parser a 
+token p = spaces *> p <* spaces 
+
+
+charTok :: Char -> Parser Char 
+charTok c = token (char c) 
+
+
+stringTok :: String -> Parser String 
+stringTok s = token (string s) 

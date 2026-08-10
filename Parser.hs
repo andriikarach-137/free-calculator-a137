@@ -18,7 +18,7 @@ parseIDENTIFIER = ((:) <$> alpha <*> many (alpha <|> digit))
 -- Parsers for non-terminal rules 
 
 parsePrimary :: Parser Expr 
-parsePrimary = char '(' *> parseExpr <* char ')' <|> Val <$> parseNUM <|> Var <$> parseIDENTIFIER
+parsePrimary = charTok '(' *> parseExpr <* charTok ')' <|> Val <$> parseNUM <|> Var <$> parseIDENTIFIER
 
 
 parsePostfix :: Parser Expr 
@@ -30,11 +30,11 @@ parsePostfix = combine <$> parsePrimary <*> (many $ char '!')
 
 parseUnary :: Parser Expr 
 parseUnary = parsePostfix 
-  <|> UnOp Neg <$> (char '-' *> parseUnary)
-  <|> UnOp Log <$> (string "log" *> parseUnary)
-  <|> UnOp Sin <$> (string "sin" *> parseUnary)
-  <|> UnOp Cos <$> (string "cos" *> parseUnary)
-  <|> UnOp Tan <$> (string "tan" *> parseUnary)
+  <|> UnOp Neg <$> (charTok '-' *> parseUnary)
+  <|> UnOp Log <$> (stringTok "log" *> parseUnary)
+  <|> UnOp Sin <$> (stringTok "sin" *> parseUnary)
+  <|> UnOp Cos <$> (stringTok "cos" *> parseUnary)
+  <|> UnOp Tan <$> (stringTok "tan" *> parseUnary)
 
 
 parseFactor :: Parser Expr 
@@ -45,7 +45,7 @@ parseFactor = combine <$> parseUnary <*> parseFactor'
     combine e es = BinOp Pow e $ foldr1 (BinOp Pow) es 
 
     parseFactor' :: Parser [Expr]
-    parseFactor' = many $ char '^' *> parseFactor  
+    parseFactor' = many $ charTok '^' *> parseFactor  
 
 
 combine :: Expr -> [(BinOp, Expr)] -> Expr 
@@ -56,25 +56,21 @@ parseTerm :: Parser Expr
 parseTerm = combine <$> parseFactor <*> many parseTerm' 
   where
     parseTerm' :: Parser (BinOp, Expr) 
-    parseTerm' = (Mul, ) <$> (char '*' *> parseFactor) <|> 
-                 (Div, ) <$> (char '/' *> parseFactor)
+    parseTerm' = (Mul, ) <$> (charTok '*' *> parseFactor) <|> 
+                 (Div, ) <$> (charTok '/' *> parseFactor)
 
 
 parseExpr :: Parser Expr 
 parseExpr = combine <$> parseTerm <*> many parseExpr' 
   where
     parseExpr' :: Parser (BinOp, Expr)
-    parseExpr' = (Add, ) <$> (char '+' *> parseTerm) <|>
-                 (Sub, ) <$> (char '-' *> parseTerm)
+    parseExpr' = (Add, ) <$> (charTok '+' *> parseTerm) <|>
+                 (Sub, ) <$> (charTok '-' *> parseTerm)
 
 
-parseAssgn :: Parser Expr 
-parseAssgn = Assign <$> (string "let " *> parseIDENTIFIER) <*> (string " = " *> parseExpr)
+parseAssgn :: Parser Assign 
+parseAssgn = Let <$> (stringTok "let" *> parseIDENTIFIER) <*> (stringTok "=" *> parseExpr)
 
 
-parseStmt :: Parser Expr 
-parseStmt = parseAssgn <|> parseExpr 
-
-
-parseProgram :: Parser Program 
-parseProgram = many (parseStmt <* string "\n") <* string ":q" 
+parseStmt :: Parser Stmt  
+parseStmt = (Assign <$> parseAssgn) <|> (Expr <$> parseExpr) 

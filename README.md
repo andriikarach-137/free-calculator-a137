@@ -5,7 +5,6 @@ Backus-Naur-Form for the calculator
 
 RULES OF THE LANGUAGE:
 
-<program>  ::= (<stmt> NEWLINE)* EXIT
 <stmt>     ::= <assgn> | <expr> 
 <assgn>    ::= LET IDENTIFIER ASSGN_OP <expr>
 <expr>     ::= <term> ((PLUS|MINUS) <term>)*
