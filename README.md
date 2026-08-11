@@ -1,7 +1,16 @@
 # free-calculator-a137
-This repository extends on my previous project, which was applicative parser. Here I will implement fully free written expression calculator
+This project extends on my previous project, which was a primitive and limited applicative parser. This one however,
+is a full on "REPL"-like interpreter for a mini language that I constructed. Language consists of two simple units,
+mainly expressions and statements 
 
-Backus-Naur-Form for the calculator 
+Expressions range from various binary and unary operations, while there's only one type of statement - assignment. 
+
+In order to parse a language, I used a famous algorithm - recursive descent parser. The principle of it is simple - 
+in order to parse a certain rule, we must first parse its subrules, hence name recursive. As to the model of parsers
+themselves, I used parser combinators, where a parser is an effectful computation, a wrapper of a function which takes
+in a string and then returns parsed value with string residual, all wrapped in the context of failure - hence 
+Maybe (a, String). Below is specified BNF of the language. 
+
 
 RULES OF THE LANGUAGE:
 
@@ -35,4 +44,3 @@ RBR        ::= ")"
 EXIT       ::= ":q"
 NUM        handled internally 
 CHAR       handled internally 
-EPS        handled internally 
