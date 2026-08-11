@@ -22,19 +22,21 @@ parsePrimary = charTok '(' *> parseExpr <* charTok ')' <|> Val <$> parseNUM <|> 
 
 
 parsePostfix :: Parser Expr 
-parsePostfix = combine <$> parsePrimary <*> (many $ char '!')
+parsePostfix = combine <$> parsePrimary <*> (many $ charTok '!')
   where
     combine :: Expr -> String -> Expr 
     combine = foldl (\e _ -> UnOp Fact e)
 
 
 parseUnary :: Parser Expr 
-parseUnary = parsePostfix 
-  <|> UnOp Neg <$> (charTok '-' *> parseUnary)
+parseUnary = 
+      UnOp Neg <$> (charTok '-' *> parseUnary)
   <|> UnOp Log <$> (stringTok "log" *> parseUnary)
+  <|> UnOp Exp <$> (stringTok "exp" *> parseUnary)
   <|> UnOp Sin <$> (stringTok "sin" *> parseUnary)
   <|> UnOp Cos <$> (stringTok "cos" *> parseUnary)
   <|> UnOp Tan <$> (stringTok "tan" *> parseUnary)
+  <|> parsePostfix 
 
 
 parseFactor :: Parser Expr 

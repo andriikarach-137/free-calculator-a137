@@ -36,10 +36,10 @@ unOps Log = safeLog
   where 
     safeLog x | x < 0 = Nothing 
               | otherwise = Just $ log x 
-unOp Sin = Just . sin 
-unOp Cos = Just . cos 
-unOp Tan = Just . tan 
-unOp Fact = safeFact 
+unOps Sin = Just . sin 
+unOps Cos = Just . cos 
+unOps Tan = Just . tan 
+unOps Fact = safeFact 
   where
     safeFact x | x < 0 || (snd (properFraction x) /= 0) = Nothing 
                | otherwise = Just $ product [1..x]
