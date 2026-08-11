@@ -61,3 +61,18 @@ assign :: Env -> Assign -> Maybe Env
 assign env (Let s e) = do 
     v <- eval env e 
     pure $ Map.insert s v env 
+
+  
+execStmt :: Env -> Stmt -> IO Env 
+execStmt env (Expr e) = case eval env e of 
+  Nothing -> do
+    putStrLn "Evaluation Error" 
+    pure env 
+  Just v -> do
+    print v 
+    pure env 
+execStmt env (Assign a) = case assign env a of 
+  Nothing -> do 
+    putStrLn "Evaluation Error"
+    pure env 
+  Just env' -> pure env' 

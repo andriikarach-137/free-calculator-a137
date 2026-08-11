@@ -15,5 +15,3 @@ data Expr
 data Assign = Let String Expr 
 
 data Stmt = Expr Expr | Assign Assign 
-
-type Program = [Stmt]
