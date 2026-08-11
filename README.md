@@ -1,4 +1,7 @@
 # free-calculator-a137
+
+In order to run an interpreter, just write run in ghci after loading Run.hs file
+
 This project extends on my previous project, which was a primitive and limited applicative parser. This one however,
 is a full on "REPL"-like interpreter for a mini language that I constructed. Language consists of two simple units,
 mainly expressions and statements 
